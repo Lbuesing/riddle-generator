@@ -1,0 +1,18 @@
+version: '3'
+services:
+  RiddleGenerator:
+    image: riddle_generator:latest
+    container_name: ${CONTAINER_NAME}
+    volumes:
+      - ${DO_OUTPUT_PATH}:/usr/local/app/output
+      - ${DO_INPUT_PATH}:/usr/local/app/input
+    environment:
+      - CONFIG_FILE=${DO_CONFIG_FILE}
+      - INPUT_PATH=/usr/local/app/input
+      - OUTPUT_PATH=/usr/local/app/output
+      - OUTPUT_SVG_SUBFOLDER=svg
+      - LOGO_FILE=logo.png
+  
+    build:
+      context: ./
+      dockerfile: Dockerfile
