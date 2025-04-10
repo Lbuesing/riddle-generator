@@ -2,19 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Example matrix
-matrix = np.array([
-    [0, 1, 2],
-    [2, 1, 3],
-    [1, 0, 2]
-])
+matrix = np.array([[0, 1, 2], [2, 1, 3], [1, 0, 2]])
 
 # Create a color map
-colors = {
-    0: 'white',   # No color dot
-    1: 'yellow',
-    2: 'green',
-    3: 'blue'
-}
+colors = {0: "white", 1: "yellow", 2: "green", 3: "blue"}  # No color dot
 
 # Create an image from the matrix
 fig, ax = plt.subplots()
@@ -27,9 +18,9 @@ for i in range(matrix.shape[0]):
 
 # Add grid lines
 for i in range(matrix.shape[0] + 1):
-    ax.plot([i, i], [0, matrix.shape[0]], color='black')
+    ax.plot([i, i], [0, matrix.shape[0]], color="black")
 for j in range(matrix.shape[1] + 1):
-    ax.plot([0, matrix.shape[1]], [j, j], color='black')
+    ax.plot([0, matrix.shape[1]], [j, j], color="black")
 
 # Set limits and turn off axes
 ax.set_xlim(0, matrix.shape[1])
@@ -38,5 +29,5 @@ ax.set_xticks([])
 ax.set_yticks([])
 
 # Display the image
-plt.gca().set_aspect('equal', adjustable='box')
+plt.gca().set_aspect("equal", adjustable="box")
 plt.show()
