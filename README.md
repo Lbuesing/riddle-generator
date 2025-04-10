@@ -1,6 +1,9 @@
 # Riddle Generator
 
-Goal of this tool is to generate riddles from predefined parameters, that have only one solution and are somewhat difficult. Additionaly to that, the riddles are stored in svg files, that can then be used for laser cutting.
+This tool generates riddles from predefined parameters, that have only one solution and are somewhat decent. Additionaly to that, the riddles are stored in svg files, that can then be used for laser cutting.
+
+<img src="./example/example_lasercut_unsolved.png" height="200">
+<img src="./example/example_lasercut_solved.png" height="200">
 
 # Python execution
 ## Requirements
