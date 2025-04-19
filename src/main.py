@@ -13,6 +13,8 @@ if __name__ == "__main__":
     CONFIG_FILE = os.getenv("CONFIG_FILE")
     INPUT_PATH = os.getenv("INPUT_PATH")
     OUTPUT_PATH = os.getenv("OUTPUT_PATH")
+    TOLERANCE = float(os.getenv("TOLERANCE"))
+
     OUTPUT_SVG_SUBFOLDER = os.getenv("OUTPUT_SVG_SUBFOLDER")
     with open(os.path.join(INPUT_PATH, CONFIG_FILE)) as config_file:
         config = json.load(config_file)
@@ -34,9 +36,11 @@ if __name__ == "__main__":
     svgGenerator = SvgGenerator(output_folder_riddles_svg, output_folder_riddles_svg)
 
     for decent_riddle in decent_riddles:
-        print(f'Generating svg for {RIDDLE_NAME}_{decent_riddle["id"]}_{decent_riddle["difficulty"]}')
+        print(f'Generating svg for {RIDDLE_NAME}_{X_DIMENSION}x{Y_DIMENSION}_{decent_riddle["id"]}\
+                                                  _{decent_riddle["difficulty"]}_tolerace_{str(TOLERANCE).replace(".","_")}')
         riddleSolver = RiddleSolver(decent_riddle["riddle"], tiles)
         solution = riddleSolver.solve_riddle()
-        svgGenerator.generate_and_save_riddle_svg(decent_riddle["riddle"], f'{RIDDLE_NAME}_{decent_riddle["id"]}_{decent_riddle["difficulty"]}')
-        print(f'Generating svg for tiles for riddle {RIDDLE_NAME}_{decent_riddle["id"]}_{decent_riddle["difficulty"]}')
-        svgGenerator.generate_and_save_tile_svg(solution, f'{RIDDLE_NAME}_{decent_riddle["id"]}_{decent_riddle["difficulty"]}_tiles')
+        svgGenerator.generate_and_save_riddle_svg(decent_riddle["riddle"], f'{RIDDLE_NAME}_{X_DIMENSION}x{Y_DIMENSION}_{decent_riddle["id"]}\
+                                                  _{decent_riddle["difficulty"]}_tolerace_{str(TOLERANCE).replace(".","_")}',TOLERANCE)
+        print(f'Generating svg for tiles for riddle {RIDDLE_NAME}_{X_DIMENSION}x{Y_DIMENSION}_{decent_riddle["id"]}_{decent_riddle["difficulty"]}_tiles_tolerace_{str(TOLERANCE).replace(".","_")}')
+        svgGenerator.generate_and_save_tile_svg(solution, f'{RIDDLE_NAME}_{X_DIMENSION}x{Y_DIMENSION}_{decent_riddle["id"]}_{decent_riddle["difficulty"]}_tiles_tolerace_{str(TOLERANCE).replace(".","_")}')

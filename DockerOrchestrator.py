@@ -121,7 +121,7 @@ class DockerOrchestrator():
             subprocess.call(dockerComposeRunCommand, shell=True, stdout=subprocess.DEVNULL)
 
 if __name__=="__main__":
-    input_config_path = "./experiment_configs.json"
+    input_config_path = "/home/lukas/repositories/riddle-generator/all_experiment_configs.json"
     experiment_path = "./experiments"
     docker_orchestrator = DockerOrchestrator(input_config_path,experiment_path)
     docker_orchestrator.run_experiments()

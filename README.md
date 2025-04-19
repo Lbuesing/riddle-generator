@@ -101,7 +101,7 @@ The .env file can remain untouched.
 In the main of the DockerOrchestrator.py, set the `input_config_path` to the path of your experiment config.
 Then start the docker orchestrator using:
 ```bash
-source .venv/bin/activat; python DockerOrchestrator.py; deactivate
+source .venv/bin/activate; python DockerOrchestrator.py; deactivate
 ```
 ## Output
 

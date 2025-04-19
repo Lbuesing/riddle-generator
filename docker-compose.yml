@@ -12,6 +12,7 @@ services:
       - OUTPUT_PATH=/usr/local/app/output
       - OUTPUT_SVG_SUBFOLDER=svg
       - LOGO_FILE=logo.png
+      - TOLERANCE=${TOLERANCE}
   
     build:
       context: ./

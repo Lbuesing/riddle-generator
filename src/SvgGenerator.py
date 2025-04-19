@@ -11,8 +11,8 @@ class SvgGenerator:
         self.output_folder_riddles = output_folder_riddles
         self.output_folder_pieces = output_folder_pieces
 
-    def generate_and_save_riddle_svg(self, riddle_matrix, riddle_id):
-        combined_cubes = self.combine_cubes_to_riddle(riddle_matrix, cube_size=1.0)
+    def generate_and_save_riddle_svg(self, riddle_matrix, riddle_id,tolerance=0):
+        combined_cubes = self.combine_cubes_to_riddle(riddle_matrix, cube_size=1.0,tolerance=tolerance)
         # patch_list = self.generate_outline_patches(riddle_matrix,cube_size=1.0)
         self.export_shape(combined_cubes, [], os.path.join(self.output_folder_riddles, f"{riddle_id}_riddle.svg"), False)
 
@@ -114,18 +114,18 @@ class SvgGenerator:
                 )
             )
 
-    def combine_cubes_to_riddle(self, matrix, cube_size=1.0):
+    def combine_cubes_to_riddle(self, matrix, cube_size=1.0,tolerance=0.05):
         shapes = []
         for x in range(len(matrix)):
             for y in range(len(matrix[0])):
                 if matrix[x][y] == 0:
-                    shape = self.generate_square(cube_size=cube_size)
+                    shape = self.generate_square(cube_size=cube_size,tolerance=tolerance)
                 elif matrix[x][y] == 1:
-                    shape = self.generate_square_with_hole(cube_size=cube_size, hole_type="square")
+                    shape = self.generate_square_with_hole(cube_size=cube_size, hole_type="square",tolerance=tolerance)
                 elif matrix[x][y] == 2:
-                    shape = self.generate_square_with_hole(cube_size=cube_size, hole_type="cross")
+                    shape = self.generate_square_with_hole(cube_size=cube_size, hole_type="cross",tolerance=tolerance)
                 elif matrix[x][y] == 3:
-                    shape = self.generate_square_with_hole(cube_size=cube_size, hole_type="circle")
+                    shape = self.generate_square_with_hole(cube_size=cube_size, hole_type="circle",tolerance=tolerance)
                 shape["position"] = (cube_size * x, cube_size * y)
                 shapes.append(shape)
         return shapes
@@ -155,15 +155,15 @@ class SvgGenerator:
             elif shape["type"] == "square_with_hole":
                 # ax.add_patch(patches.Rectangle(shape['position'], shape['size'], shape['size'], fill=False))
                 if shape["hole_type"] == "square":
-                    hole_size = shape["size"] * 0.4
-                    hole_position = (shape["position"][0] + shape["size"] * 0.3, shape["position"][1] + shape["size"] * 0.3)
+                    hole_size = shape["size"] * 0.4 - shape["tolerance"]
+                    hole_position = (shape["position"][0] + shape["size"] * 0.3+shape["tolerance"]/2, shape["position"][1] + shape["size"] * 0.3+shape["tolerance"]/2)
                     ax.add_patch(patches.Rectangle(hole_position, hole_size, hole_size, fill=False))
                 elif shape["hole_type"] == "cross":
-                    cross_path = self.generate_cross_path(shape["position"], shape["size"] * 0.6)
+                    cross_path = self.generate_cross_path(shape["position"], shape["size"] * 0.6 - shape["tolerance"])
                     ax.add_patch(patches.PathPatch(cross_path, fill=False))
                 elif shape["hole_type"] == "circle":
-                    hole_radius = shape["size"] * 0.25
-                    hole_center = (shape["position"][0] + shape["size"] / 2, shape["position"][1] + shape["size"] / 2)
+                    hole_radius = shape["size"] * 0.25 - shape["tolerance"]/2
+                    hole_center = (shape["position"][0] + shape["size"] / 2 , shape["position"][1] + shape["size"] / 2 )
                     ax.add_patch(patches.Circle(hole_center, hole_radius, fill=False))
             elif shape["type"] == "circle":
                 ax.add_patch(patches.Circle(shape["position"], shape["radius"], fill=False))
@@ -192,11 +192,11 @@ class SvgGenerator:
             plt.savefig(back_plate_name, format="svg", bbox_inches="tight", pad_inches=0, dpi=96)
             plt.close()
 
-    def generate_square(self, cube_size=1.0):
-        return {"type": "square", "size": cube_size}
+    def generate_square(self, cube_size=1.0,tolerance=0.0):
+        return {"type": "square", "size": cube_size, "tolerance":tolerance}
 
-    def generate_square_with_hole(self, cube_size=1.0, hole_type="square"):
-        return {"type": "square_with_hole", "size": cube_size, "hole_type": hole_type}
+    def generate_square_with_hole(self, cube_size=1.0, hole_type="square",tolerance=0.0):
+        return {"type": "square_with_hole", "size": cube_size, "hole_type": hole_type, "tolerance":tolerance}
 
     def combine_shapes_to_tile(self, tile_matrix, cube_size=1.0):
         shapes = []
@@ -320,5 +320,5 @@ if __name__ == "__main__":
     os.makedirs("test_svg", exist_ok=True)
 
     svgGenerator = SvgGenerator("test_svg", "test_svg")
-    svgGenerator.generate_and_save_riddle_svg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], "test_riddle")
+    svgGenerator.generate_and_save_riddle_svg([[1, 1, 1], [1, 0, 1], [1, 1, 0]], "test_riddle",tolerance=0)
     svgGenerator.generate_and_save_tile_svg([{"position": [[0, 3, 0], [1, 2, 1], [0, 2, 0], [1, 0, 0]]}], "test_tile", 1)
